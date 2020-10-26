@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="311" viewBox="0 0 1920 311">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #5a5a5a;
+        fill-rule: evenodd;
+        opacity: 0.32;
+        filter: url(#filter);
+      }
+    </style>
+    <filter id="filter" x="-30" y="1915" width="1987" height="586" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#5f5f5f"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <path id="Kształt_3" data-name="Kształt 3" class="cls-1" d="M-24,2113l427-198,753,215,359-70s419.35,115.85,416,114l26,327L-30,2412Z" transform="translate(0 -1915)"/>
+</svg>

@@ -33,6 +33,7 @@
     "express-fileupload": "^1.2.0",
     "express.js": "^1.0.0",
     "mongoose": "^5.10.9",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "sha256": "^0.2.0"
   }
 }

@@ -9,8 +9,12 @@ router.get("/", (req, res) => {
   res.sendFile("/index.html", { root: public });
 });
 
-// router.get("/js/main-bundle", (req, res) => {
-//   res.sendFile("/build/js/main.bundle.js", { root: public });
-// });
+router.get("/dashboard", (req, res) => {
+  if (req.session["user"]) {
+    res.sendFile("./pages/dashboard.html", { root: public });
+  } else {
+    res.redirect("/");
+  }
+});
 
 module.exports = router;
