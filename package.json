@@ -1,0 +1,31 @@
+{
+  "name": "fastfile-server",
+  "version": "1.0.0",
+  "description": "FastFile - back-end",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mateusz-Szczykutowicz/FastFile---back-end.git"
+  },
+  "author": "Mateusz Szczykutowicz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mateusz-Szczykutowicz/FastFile---back-end/issues"
+  },
+  "homepage": "https://github.com/Mateusz-Szczykutowicz/FastFile---back-end#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "mongoose": "^5.10.11",
+    "mongoose-url-slugs": "^1.0.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
+}
