@@ -5,6 +5,7 @@ const usersController = require("../controllers/api/usersController.js");
 // [tmp]
 const User = require("../models/User.js");
 const sha256 = require("sha256");
+const passport = require("passport");
 
 //? get all users - GET api/v1/users/
 router.get("/", usersController.getAll);
@@ -13,33 +14,11 @@ router.get("/", usersController.getAll);
 router.get("/:user", usersController.getOne);
 
 //? login - POST api/v1/users/login
-router.post("/login", (req, res) => {
-  let login, password;
-  if (req.body) {
-    login = req.body.login || "";
-    login = login.toLowerCase();
-    password = sha256(req.body.password || "");
-  }
-  User.findOne({ login, password }, (err, resp) => {
-    if (err) {
-      return res.status(500).send({
-        status: false,
-        message: "Error! Contact the administrator",
-      });
-    }
-    if (resp) {
-      return res.status(200).send({
-        status: true,
-        message: "Login - success",
-      });
-    } else {
-      return res.status(404).send({
-        status: false,
-        message: "Wrong login or password",
-      });
-    }
-  });
-});
+router.post(
+  "/login",
+  passport.authenticate("local", { session: false }),
+  usersController.login
+);
 
 //? register - POST api/v1/users/
 router.post("/", usersController.register);

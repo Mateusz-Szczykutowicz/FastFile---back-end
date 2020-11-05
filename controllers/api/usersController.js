@@ -1,16 +1,19 @@
 const User = require("../../models/User.js");
-const sha256 = require("sha256");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
-  login(req, res) {},
+  login(req, res) {
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: 1200,
+    });
+    return res.send({ status: true, message: "success", token });
+  },
 
   register(req, res) {
     if (req.body) {
-      const login = req.body.login.toLowerCase();
-      const password = sha256(req.body.password);
-      const email = req.body.email;
+      const { login, password, email } = req.body;
       if (login && password && email) {
-        User.findOne({ login }, (err, resp) => {
+        User.findOne({ login }, async (err, resp) => {
           if (err) {
             return res.status(500).send({
               status: false,
@@ -23,6 +26,7 @@ module.exports = {
               .send({ status: false, message: "This login already exists" });
           } else {
             let user = new User({ login, password, email });
+            await User.register(user, password);
             user.save();
             return res
               .status(201)

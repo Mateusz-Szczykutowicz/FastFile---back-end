@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fileController = require("../controllers/api/fileController.js");
+const authMiddleware = require("../middlewares/authMiddleware.js");
 
 // [tmp]
 const fileMiddleware = require("../middlewares/fileMiddleware.js");
@@ -13,7 +14,7 @@ router.get("/:user/", fileController.readAll);
 router.get("/:user/:id", fileController.ReadOne);
 
 //? Upload file - POST
-router.post("/:user/", fileController.Create);
+router.post("/:user/", authMiddleware, fileController.Create);
 
 //? Rename file - PUT
 router.put("/:user/:id", fileController.updateOne);
