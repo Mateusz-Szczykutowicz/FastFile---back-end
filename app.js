@@ -3,6 +3,7 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 const morgan = require("morgan");
 const filesRouter = require("./routes/files.js");
+const usersRouter = require("./routes/users.js");
 const db = require("./database/db.js");
 
 db.on("error", console.error.bind(console, "connection error"));
@@ -23,3 +24,4 @@ app.use(
 
 //- Routes
 app.use("/api/v1/files", filesRouter);
+app.use("/api/v1/users", usersRouter);

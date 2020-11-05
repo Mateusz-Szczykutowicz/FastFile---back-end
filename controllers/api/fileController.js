@@ -8,7 +8,7 @@ module.exports = {
       if (err) {
         return res
           .status(500)
-          .send({ status: false, message: "Error! Contact with admin" });
+          .send({ status: false, message: "Error! Contact the administrator" });
       }
       if (resp) {
         let data = [];
@@ -39,7 +39,7 @@ module.exports = {
       if (err) {
         return res
           .status(500)
-          .send({ status: false, message: "Error! Contact with admin" });
+          .send({ status: false, message: "Error! Contact the administrator" });
       }
       if (resp) {
         let size = resp.size;
@@ -61,7 +61,7 @@ module.exports = {
     if (!req.files) {
       return res
         .status(409)
-        .send({ status: false, message: "Plik nie został dołączony" });
+        .send({ status: false, message: "File not attached!" });
     }
     let user = req.params.user || "undefined";
     let file = req.files.upload;
@@ -75,7 +75,7 @@ module.exports = {
         console.log("Error in File.findOne: " + err);
         return res
           .status(500)
-          .send({ status: false, message: "Error! Contact with admin" });
+          .send({ status: false, message: "Error! Contact the administrator" });
       }
       if (resp) {
         return res
@@ -89,9 +89,10 @@ module.exports = {
               .status(201)
               .send({ status: true, message: "Upload - success" });
           } else {
-            return res
-              .status(500)
-              .send({ status: false, message: "Error! Contact with admin" });
+            return res.status(500).send({
+              status: false,
+              message: "Error! Contact the administrator",
+            });
           }
         } else {
           return res
@@ -108,7 +109,7 @@ module.exports = {
       if (err) {
         return res
           .status(500)
-          .send({ status: false, message: "Error! Contact with admin" });
+          .send({ status: false, message: "Error! Contact the administrator" });
       }
     });
     if (removed.deletedCount == 1) {
