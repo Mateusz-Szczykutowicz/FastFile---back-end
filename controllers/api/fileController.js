@@ -10,7 +10,7 @@ module.exports = {
           .status(500)
           .send({ status: false, message: "Error! Contact the administrator" });
       }
-      if (resp) {
+      if (resp[0]) {
         let data = [];
         for (let el of resp) {
           data.push({

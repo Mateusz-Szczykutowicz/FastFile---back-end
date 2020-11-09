@@ -14,7 +14,7 @@ router.get("/:user/", fileController.readAll);
 router.get("/:user/:id", fileController.ReadOne);
 
 //? Upload file - POST
-router.post("/:user/", authMiddleware, fileController.Create);
+router.post("/:user/", fileController.Create);
 
 //? Rename file - PUT
 router.put("/:user/:id", fileController.updateOne);

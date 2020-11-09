@@ -9,7 +9,9 @@ let User = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    password: String,
     email: String,
+    signature: String,
     role: {
       type: String,
       trim: true,

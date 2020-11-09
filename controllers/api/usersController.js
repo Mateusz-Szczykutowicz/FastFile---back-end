@@ -1,12 +1,16 @@
 const User = require("../../models/User.js");
-const jwt = require("jsonwebtoken");
+const sha256 = require("sha256");
+const authMiddleware = require("../../middlewares/authMiddleware.js");
 
 module.exports = {
-  login(req, res) {
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
-      expiresIn: 1200,
+  async login(req, res) {
+    let user = await User.findOne({ login: req.body.login });
+    let myToken = new authMiddleware.Token(user, { expire: 5 });
+    return res.status(200).send({
+      status: true,
+      message: "Login - success",
+      token: myToken.createToken(),
     });
-    return res.send({ status: true, message: "success", token });
   },
 
   register(req, res) {
@@ -27,6 +31,8 @@ module.exports = {
           } else {
             let user = new User({ login, password, email });
             await User.register(user, password);
+            user.password = sha256(password);
+            user.signature = sha256(`${user["_id"]}`);
             user.save();
             return res
               .status(201)
@@ -70,7 +76,14 @@ module.exports = {
     });
   },
 
-  getOne(req, res) {
+  async getOne(req, res) {
+    let token = req.headers.authorization.split(".");
+    let signature = token[1];
+    let admin = await User.findOne({ signature });
+    console.log(admin.role);
+    if (admin.role !== "admin") {
+      return res.status(401).send({ status: false, message: "No permission!" });
+    }
     const login = req.params.user.toLowerCase();
     User.findOne({ login }, (err, resp) => {
       if (err) {

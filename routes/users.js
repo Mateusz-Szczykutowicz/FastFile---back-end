@@ -6,19 +6,16 @@ const usersController = require("../controllers/api/usersController.js");
 const User = require("../models/User.js");
 const sha256 = require("sha256");
 const passport = require("passport");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 //? get all users - GET api/v1/users/
 router.get("/", usersController.getAll);
 
 //? get one user - GET api/v1/users/:user
-router.get("/:user", usersController.getOne);
+router.get("/:user", authMiddleware.checkToken, usersController.getOne);
 
 //? login - POST api/v1/users/login
-router.post(
-  "/login",
-  passport.authenticate("local", { session: false }),
-  usersController.login
-);
+router.post("/login", authMiddleware.login, usersController.login);
 
 //? register - POST api/v1/users/
 router.post("/", usersController.register);

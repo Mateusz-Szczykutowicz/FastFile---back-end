@@ -8,9 +8,8 @@ const morgan = require("morgan");
 const filesRouter = require("./routes/files.js");
 const usersRouter = require("./routes/users.js");
 const db = require("./database/db.js");
-const passport = require("./middlewares/passportMiddleware.js");
-
-passport();
+const authMiddleware = require("./middlewares/authMiddleware");
+const User = require("./models/User");
 
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -31,3 +30,10 @@ app.use(
 //- Routes
 app.use("/api/v1/files", filesRouter);
 app.use("/api/v1/users", usersRouter);
+
+app.get("/test", authMiddleware.checkToken, async (req, res) => {
+  let token = req.headers.authorization.split(".");
+  let signature = token[1];
+  let user = await User.findOne({ signature });
+  res.send({ test: "pomyślnie przeprowadzowno", user });
+});
