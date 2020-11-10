@@ -5,13 +5,15 @@ const authMiddleware = require("../middlewares/authMiddleware.js");
 
 // [tmp]
 const fileMiddleware = require("../middlewares/fileMiddleware.js");
+const userMiddleware = require("../middlewares/userMiddleware.js");
 const File = require("../models/File.js");
+const User = require("../models/User.js");
 
 //? Display all files - GET
-router.get("/:user", fileController.user.readAll);
+router.get("/", authMiddleware.checkToken, fileController.user.readAll);
 
 //? Display one file - GET
-router.get("/:user/:id", fileController.user.readOne);
+router.get("/:id", authMiddleware.checkToken, fileController.user.readOne);
 
 //? Upload file - POST
 router.post("/:user/", fileController.user.create);

@@ -8,7 +8,7 @@ const usersController = require("../controllers/api/usersController.js");
 const fileMiddleware = require("../middlewares/fileMiddleware.js");
 const File = require("../models/File.js");
 
-//? Display all files - GET
+//? Display all files as admin - GET api/v1/admin/file/:user
 router.get(
   "/files/:user",
   authMiddleware.checkToken,
@@ -16,7 +16,7 @@ router.get(
   fileController.admin.readAll
 );
 
-//? Display one file - GET
+//? Display one file as admin - GET api/v1/admin/file/:user/:id
 router.get(
   "/files/:user/:id",
   authMiddleware.checkToken,
@@ -24,7 +24,7 @@ router.get(
   fileController.admin.readOne
 );
 
-//? Upload file - POST
+//? Upload file as admin - POST api/v1/admin/file/:user
 router.post(
   "/files/:user/",
   authMiddleware.checkToken,
@@ -32,7 +32,7 @@ router.post(
   fileController.admin.create
 );
 
-//? Rename file - PUT
+//? Rename file as admin - PUT api/v1/admin/file/:user/:id
 router.put(
   "/files/:user/:id",
   authMiddleware.checkToken,
@@ -40,7 +40,7 @@ router.put(
   fileController.admin.updateOne
 );
 
-//? Delete file - DELETE
+//? Delete file as admin - DELETE api/v1/admin/file/:user/:id
 router.delete(
   "/files/:user/:id",
   authMiddleware.checkToken,
@@ -48,20 +48,20 @@ router.delete(
   fileController.admin.deleteOne
 );
 
-//? get all users - GET api/v1/admin/users/
+//? get all users as admin - GET api/v1/admin/users/
 router.get(
   "/users",
   authMiddleware.checkToken,
   authMiddleware.isAdmin,
-  usersController.getAll
+  usersController.admin.getAll
 );
 
-//? get one user - GET api/v1/admin/users/:user
+//? get one user as admin - GET api/v1/admin/users/:user
 router.get(
   "/users/:user",
   authMiddleware.checkToken,
   authMiddleware.isAdmin,
-  usersController.getOne
+  usersController.admin.getOne
 );
 
 module.exports = router;

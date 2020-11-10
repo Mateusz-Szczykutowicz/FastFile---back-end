@@ -9,10 +9,10 @@ const passport = require("passport");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 //? login - POST api/v1/users/login
-router.post("/login", authMiddleware.login, usersController.login);
+router.post("/login", authMiddleware.login, usersController.user.login);
 
 //? register - POST api/v1/users/
-router.post("/", usersController.register);
+router.post("/", usersController.user.register);
 
 //? recover password - POST api/v1/users/password
 router.post("/password", (req, res) => {
@@ -21,7 +21,7 @@ router.post("/password", (req, res) => {
   res.send("Recover password");
 });
 
-//? delete user - DELETE api/v1/users/:user
+//? delete account - DELETE api/v1/users/:user
 router.delete("/:user", (req, res) => {
   // TODO
 

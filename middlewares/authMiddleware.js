@@ -48,8 +48,8 @@ module.exports = {
     if (!req.headers.authorization) {
       console.log("Blank header - authorization");
       return res
-        .status(500)
-        .send({ status: false, message: "Error! Contact the admin" });
+        .status(401)
+        .send({ status: false, message: "Unauthorized access" });
     }
     let token = req.headers.authorization;
     token = token.split(".");
@@ -58,7 +58,9 @@ module.exports = {
     if (tokens[payload] == signature) {
       next();
     } else {
-      res.status(401).send({ status: false, message: "Unauthorized access" });
+      return res
+        .status(401)
+        .send({ status: false, message: "Unauthorized access" });
     }
   },
   async isAdmin(req, res, next) {
@@ -74,7 +76,7 @@ module.exports = {
     if (admin.role === "admin") {
       return next();
     } else {
-      return res.status(401).send({ status: false, message: "No permission!" });
+      return res.status(403).send({ status: false, message: "No permission!" });
     }
   },
 };
