@@ -1,5 +1,6 @@
 const sha256 = require("sha256");
 const User = require("../models/User");
+const config = require("../config.js");
 
 let tokens = {};
 
@@ -14,7 +15,7 @@ class Token {
     let payload = sha256(
       `${this.user.salt}${randomize * Math.random()}${this.user.hash}`
     );
-    let signature = sha256(`${this.user["_id"]}`);
+    let signature = sha256(`${this.user["_id"]}.${config.tokenSalt}`);
     this.token = `${payload}.${signature}`;
     tokens[payload] = signature;
     setTimeout(() => {
@@ -58,6 +59,22 @@ module.exports = {
       next();
     } else {
       res.status(401).send({ status: false, message: "Unauthorized access" });
+    }
+  },
+  async isAdmin(req, res, next) {
+    let token = req.headers.authorization.split(".");
+    let signature = token[1];
+    let admin = await User.findOne({ signature });
+    if (!admin) {
+      console.log("User not found! authMiddleware.isAdmin");
+      return res
+        .status(500)
+        .send({ status: false, message: "Error! Contact the administrator" });
+    }
+    if (admin.role === "admin") {
+      return next();
+    } else {
+      return res.status(401).send({ status: false, message: "No permission!" });
     }
   },
 };

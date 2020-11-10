@@ -10,11 +10,15 @@ const usersRouter = require("./routes/users.js");
 const db = require("./database/db.js");
 const authMiddleware = require("./middlewares/authMiddleware");
 const User = require("./models/User");
+const adminRouter = require("./routes/admin.js");
 
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
   console.log("DB connection - success");
 });
+
+//- Disable default settings
+app.disable("x-powered-by");
 
 //- Middleware - dev
 app.use(morgan("dev"));
@@ -30,6 +34,7 @@ app.use(
 //- Routes
 app.use("/api/v1/files", filesRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.get("/test", authMiddleware.checkToken, async (req, res) => {
   let token = req.headers.authorization.split(".");

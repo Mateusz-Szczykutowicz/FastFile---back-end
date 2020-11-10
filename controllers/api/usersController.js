@@ -1,6 +1,7 @@
 const User = require("../../models/User.js");
 const sha256 = require("sha256");
 const authMiddleware = require("../../middlewares/authMiddleware.js");
+const config = require("../../config.js");
 
 module.exports = {
   async login(req, res) {
@@ -30,9 +31,10 @@ module.exports = {
               .send({ status: false, message: "This login already exists" });
           } else {
             let user = new User({ login, password, email });
-            await User.register(user, password);
             user.password = sha256(password);
-            user.signature = sha256(`${user["_id"]}`);
+            user.signature = sha256(`${user["_id"]}.${config.tokenSalt}`);
+            user.salt = sha256(`${user["_id"]}${Math.random()}.${config.salt}`);
+            user.hash = sha256(`${user["_id"]}.${config.hash}${Math.random()}`);
             user.save();
             return res
               .status(201)
@@ -51,7 +53,7 @@ module.exports = {
     }
   },
 
-  getAll(req, res) {
+  async getAll(req, res) {
     User.find({}, (err, resp) => {
       if (err) {
         return res
@@ -77,13 +79,6 @@ module.exports = {
   },
 
   async getOne(req, res) {
-    let token = req.headers.authorization.split(".");
-    let signature = token[1];
-    let admin = await User.findOne({ signature });
-    console.log(admin.role);
-    if (admin.role !== "admin") {
-      return res.status(401).send({ status: false, message: "No permission!" });
-    }
     const login = req.params.user.toLowerCase();
     User.findOne({ login }, (err, resp) => {
       if (err) {
