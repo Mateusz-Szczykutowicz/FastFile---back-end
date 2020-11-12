@@ -5,34 +5,40 @@ const usersController = require("../controllers/api/usersController.js");
 // [tmp]
 const User = require("../models/User.js");
 const sha256 = require("sha256");
-const passport = require("passport");
 const authMiddleware = require("../middlewares/authMiddleware");
+const config = require("../config.js");
 
 //? login - POST api/v1/users/login
 router.post("/login", authMiddleware.login, usersController.user.login);
+
+//? logout - POST api/v1/users/logout
+router.get("/logout", authMiddleware.checkToken, usersController.user.logout);
 
 //? register - POST api/v1/users/
 router.post("/", usersController.user.register);
 
 //? recover password - POST api/v1/users/password
 router.post("/password", (req, res) => {
-  // TODO
+    // TODO
 
-  res.send("Recover password");
+    res.send("Recover password");
 });
 
-//? delete account - DELETE api/v1/users/:user
-router.delete("/:user", (req, res) => {
-  // TODO
+//? get information about account - GET api/v1/users
+router.get("/", authMiddleware.checkToken, usersController.user.getInformation);
 
-  res.send("delete user");
-});
+//? delete account - DELETE api/v1/users/
+router.delete(
+    "/",
+    authMiddleware.checkToken,
+    usersController.user.deleteAccount
+);
 
 //? change password - PUT api/v1/users/password
-router.put("/:user", (req, res) => {
-  // TODO
-
-  res.send("change password");
-});
+router.put(
+    "/password",
+    authMiddleware.checkToken,
+    usersController.user.changePasword
+);
 
 module.exports = router;

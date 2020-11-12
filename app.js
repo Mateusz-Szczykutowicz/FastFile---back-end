@@ -14,7 +14,7 @@ const adminRouter = require("./routes/admin.js");
 
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
-  console.log("DB connection - success");
+    console.log("DB connection - success");
 });
 
 //- Disable default settings
@@ -26,9 +26,9 @@ app.use(morgan("dev"));
 //- Middleware - production
 app.use(cors());
 app.use(
-  fileUpload({
-    createParentPath: true,
-  })
+    fileUpload({
+        createParentPath: true,
+    })
 );
 
 //- Routes
@@ -36,9 +36,14 @@ app.use("/api/v1/files", filesRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/admin", adminRouter);
 
+//? Catch undefined path - url
+app.use((req, res) => {
+    res.status(404).send({ status: false, message: "404 - Not found!" });
+});
+
 app.get("/test", authMiddleware.checkToken, async (req, res) => {
-  let token = req.headers.authorization.split(".");
-  let signature = token[1];
-  let user = await User.findOne({ signature });
-  res.send({ test: "pomyślnie przeprowadzowno", user });
+    let token = req.headers.authorization.split(".");
+    let signature = token[1];
+    let user = await User.findOne({ signature });
+    res.send({ test: "pomyślnie przeprowadzowno", user });
 });
