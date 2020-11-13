@@ -17,10 +17,10 @@ router.get("/", authMiddleware.checkToken, fileController.user.readAll);
 router.get("/:id", authMiddleware.checkToken, fileController.user.readOne);
 
 //? Upload file - POST api/v1/files/
-router.post("/", /*authMiddleware.checkToken,*/ fileController.user.create);
+router.post("/", authMiddleware.checkToken, fileController.user.create);
 
 //? Rename file - PUT api/v1/files/:id
-router.put("/:id", fileController.user.updateOne);
+router.put("/:id", authMiddleware.checkToken, fileController.user.updateOne);
 
 //? Delete file - DELETE api/v1/files/:id
 router.delete("/:id", authMiddleware.checkToken, fileController.user.deleteOne);
@@ -28,14 +28,14 @@ router.delete("/:id", authMiddleware.checkToken, fileController.user.deleteOne);
 //? Download file - GET api/v1/files/:id/download
 router.get(
     "/:id/download",
-    // authMiddleware.checkToken,
+    authMiddleware.checkToken,
     fileController.user.download
 );
 
 //? view img - GET api/v1/files/:id/image
 router.get(
     "/:id/image",
-    // authMiddleware.checkToken,
+    authMiddleware.checkToken,
     fileController.user.viewImage
 );
 

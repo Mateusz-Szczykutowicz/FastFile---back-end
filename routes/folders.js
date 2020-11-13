@@ -15,9 +15,13 @@ const path = require("path");
 const Folder = require("../models/Folder.js");
 
 //? Create one folder - POST api/v1/folders
-router.post("/", folderController.user.create);
+router.post("/", authMiddleware.checkToken, folderController.user.create);
 
 //? Get all files in folder - GET api/v1/folders?path=img
-router.get("/", folderController.user.getAllFilesAndFolders);
+router.get(
+    "/",
+    authMiddleware.checkToken,
+    folderController.user.getAllFilesAndFolders
+);
 
 module.exports = router;

@@ -11,7 +11,7 @@ module.exports = {
     user: {
         async login(req, res) {
             let user = await User.findOne({ login: req.body.login });
-            let myToken = new authMiddleware.Token(user, { expire: 15 });
+            let myToken = new authMiddleware.Token(user, { expire: 30 });
             return res.status(200).send({
                 status: true,
                 message: "Login - success",

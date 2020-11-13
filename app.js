@@ -22,7 +22,7 @@ db.once("open", () => {
 app.disable("x-powered-by");
 
 //- Middleware - dev
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 //- Middleware - production
 app.use(cors());
