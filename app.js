@@ -1,6 +1,3 @@
-const dotenv = require("dotenv");
-dotenv.config({ path: ".env" });
-
 const app = require("./server");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
