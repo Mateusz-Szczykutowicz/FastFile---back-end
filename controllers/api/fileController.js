@@ -4,6 +4,7 @@ const userMiddleware = require("../../middlewares/userMiddleware.js");
 const User = require("../../models/User.js");
 const fs = require("fs");
 const path = require("path");
+const Folder = require("../../models/Folder.js");
 
 module.exports = {
     admin: {
@@ -87,6 +88,12 @@ module.exports = {
             let uri = `${user}/${path}/${file.name}`;
             let { name, size, mimetype } = file;
             const myFile = new File({ user, name, size, mimetype, url });
+            const folder = await Folder.findOne({ path, user });
+            if (!folder) {
+                return res
+                    .status(406)
+                    .send({ status: false, message: "Folder not exist" });
+            }
             File.findOne({ user, name, url }, (err, resp) => {
                 if (err) {
                     console.log("Error in File.findOne: " + err);
@@ -140,7 +147,6 @@ module.exports = {
                         __dirname,
                         `../../uploads/${user}${resp.url}/${resp.name}`
                     );
-                    console.log("filePath :>> ", filePath);
                     fs.unlink(filePath, (err) => {
                         if (err) {
                             console.log(err);
@@ -332,6 +338,12 @@ module.exports = {
             let url = `${path}`;
             let uri = `${user}/${path}/${file.name}`;
             let { name, size, mimetype } = file;
+            const folder = await Folder.findOne({ path, user });
+            if (!folder) {
+                return res
+                    .status(406)
+                    .send({ status: false, message: "Folder not exist" });
+            }
             const myFile = new File({ user, name, size, mimetype, url });
             File.findOne({ user, name, url }, (err, resp) => {
                 if (err) {

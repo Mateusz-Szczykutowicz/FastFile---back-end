@@ -17,7 +17,7 @@ router.get("/", authMiddleware.checkToken, fileController.user.readAll);
 router.get("/:id", authMiddleware.checkToken, fileController.user.readOne);
 
 //? Upload file - POST api/v1/files/
-router.post("/", authMiddleware.checkToken, fileController.user.create);
+router.post("/", /*authMiddleware.checkToken,*/ fileController.user.create);
 
 //? Rename file - PUT api/v1/files/:id
 router.put("/:id", fileController.user.updateOne);

@@ -5,6 +5,7 @@ const config = require("../../config.js");
 const path = require("path");
 const fs = require("fs");
 const File = require("../../models/File.js");
+const Folder = require("../../models/Folder.js");
 
 module.exports = {
     user: {
@@ -35,12 +36,17 @@ module.exports = {
                             });
                         }
                         if (resp) {
-                            return res.status(406).send({
+                            return res.status(409).send({
                                 status: false,
                                 message: "This login already exists",
                             });
                         } else {
                             let user = new User({ login, password, email });
+                            const folder = new Folder({
+                                user: user.login,
+                                parent: "root",
+                            });
+                            folder.save();
                             user.password = sha256(
                                 `${password}${config.passwordSalt}`
                             );
@@ -61,13 +67,13 @@ module.exports = {
                         }
                     });
                 } else {
-                    return res.status(409).send({
+                    return res.status(406).send({
                         status: false,
                         message: "One of the form fields is empty",
                     });
                 }
             } else {
-                return res.status(409).send({
+                return res.status(406).send({
                     status: false,
                     message: "One of the form fields is empty",
                 });
@@ -285,6 +291,14 @@ module.exports = {
                     }
                 );
                 File.deleteMany({ user: resp.login }, (err) => {
+                    if (err) {
+                        console.log(
+                            "Error in delete account - remove files in DB :>> ",
+                            err
+                        );
+                    }
+                });
+                Folder.deleteMany({ user: resp.login }, (err) => {
                     if (err) {
                         console.log(
                             "Error in delete account - remove files in DB :>> ",
