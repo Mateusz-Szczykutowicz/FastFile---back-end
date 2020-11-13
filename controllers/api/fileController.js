@@ -18,6 +18,7 @@ module.exports = {
                 }
                 if (resp[0]) {
                     let data = [];
+                    let filesCounter = 0;
                     for (let el of resp) {
                         data.push({
                             user: el.user,
@@ -27,11 +28,12 @@ module.exports = {
                             type: el.mimetype,
                             path: el.url,
                         });
+                        filesCounter++;
                     }
                     return res.status(200).send({
                         status: true,
-                        message: "Files found!",
-                        data: data,
+                        message: `Found ${filesCounter} files`,
+                        files: data,
                     });
                 } else {
                     return res
@@ -80,9 +82,9 @@ module.exports = {
                     .send({ status: false, message: "User not found" });
             }
             let file = req.files.upload;
-            let path = req.body.path || "/";
+            let path = req.body.path || "";
             let url = `${path}`;
-            let uri = `${user}/${url}/${file.name}`;
+            let uri = `${user}/${path}/${file.name}`;
             let { name, size, mimetype } = file;
             const myFile = new File({ user, name, size, mimetype, url });
             File.findOne({ user, name, url }, (err, resp) => {
@@ -190,6 +192,37 @@ module.exports = {
                 });
             });
         },
+        viewImage(req, res) {
+            const user = req.params.user;
+            const slug = req.params.id;
+            File.findOne({ user, slug }, (err, resp) => {
+                if (err) {
+                    console.log("Error in view image :>> ", err);
+                    return res.status(500).send({
+                        status: false,
+                        message: "Error! Contact the administrator",
+                    });
+                }
+                if (resp) {
+                    const type = resp.mimetype.split("/");
+                    if (type[0] !== "image") {
+                        return res.status(406).send({
+                            status: false,
+                            message: "File is not an image",
+                        });
+                    }
+                    const filePath = path.join(
+                        __dirname,
+                        `../../uploads/${user}${resp.url}/${resp.name}`
+                    );
+                    return res.status(200).sendFile(filePath);
+                } else {
+                    return res
+                        .status(404)
+                        .send({ status: false, message: "File not found!" });
+                }
+            });
+        },
     },
     user: {
         async readAll(req, res) {
@@ -295,9 +328,9 @@ module.exports = {
             let userName = await User.findOne({ signature });
             let user = userName.login;
             let file = req.files.upload;
-            let path = req.body.path || "/";
+            let path = req.body.path || "";
             let url = `${path}`;
-            let uri = `${user}/${url}/${file.name}`;
+            let uri = `${user}/${path}/${file.name}`;
             let { name, size, mimetype } = file;
             const myFile = new File({ user, name, size, mimetype, url });
             File.findOne({ user, name, url }, (err, resp) => {
@@ -434,6 +467,40 @@ module.exports = {
             res.status(200).download(filePath, (err) => {
                 if (err) {
                     console.log("Error in download one :>> ", err);
+                }
+            });
+        },
+        async viewImage(req, res) {
+            const slug = req.params.id;
+            const token = req.headers.authorization.split(".");
+            const signature = token[1];
+            const user = await User.findOne({ signature });
+            const login = user.login;
+            File.findOne({ user: login, slug }, (err, resp) => {
+                if (err) {
+                    console.log("Error in view image :>> ", err);
+                    return res.status(500).send({
+                        status: false,
+                        message: "Error! Contact the administrator",
+                    });
+                }
+                if (resp) {
+                    const type = resp.mimetype.split("/");
+                    if (type[0] !== "image") {
+                        return res.status(406).send({
+                            status: false,
+                            message: "File is not an image",
+                        });
+                    }
+                    const filePath = path.join(
+                        __dirname,
+                        `../../uploads/${login}${resp.url}/${resp.name}`
+                    );
+                    return res.status(200).sendFile(filePath);
+                } else {
+                    return res
+                        .status(404)
+                        .send({ status: false, message: "File not found!" });
                 }
             });
         },
