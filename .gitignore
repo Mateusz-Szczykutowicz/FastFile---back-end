@@ -1,6 +1,4 @@
-
-node_modules/
-
-uploads/
-
+node_modules
 config.js
+uploads
+.env
