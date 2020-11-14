@@ -62,6 +62,7 @@ module.exports = {
         let payload = token[0];
         let signature = token[1];
         if (!signature || !payload) {
+            console.log("Signature or payload not exist");
             return res
                 .status(401)
                 .send({ status: false, message: "Unauthorized access" });
