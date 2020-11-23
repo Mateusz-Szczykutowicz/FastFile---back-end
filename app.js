@@ -9,6 +9,7 @@ const authMiddleware = require("./middlewares/authMiddleware");
 const User = require("./models/User");
 const adminRouter = require("./routes/admin.js");
 const folderRouter = require("./routes/folders.js");
+const Folder = require("./models/Folder");
 
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -35,14 +36,24 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/folders", folderRouter);
 
+//* TEST
+app.get("/test", async (req, res) => {
+    let regexp = new RegExp("/img/test2/", "i");
+    Folder.find({ path: regexp }, (err, resp) => {
+        if (err) {
+            console.log("Error in TEST :>> ", err);
+        }
+        if (resp[0]) {
+            console.log(resp);
+            res.send({ data: resp });
+        } else {
+            console.log("pusto");
+            res.send("Pusto");
+        }
+    });
+});
+
 //? Catch undefined path - url
 app.use((req, res) => {
     res.status(404).send({ status: false, message: "404 - Not found!" });
-});
-
-app.get("/test", authMiddleware.checkToken, async (req, res) => {
-    let token = req.headers.authorization.split(".");
-    let signature = token[1];
-    let user = await User.findOne({ signature });
-    res.send({ test: "pomyślnie przeprowadzowno", user });
 });

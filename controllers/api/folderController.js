@@ -1,7 +1,8 @@
 const User = require("../../models/User.js");
 const File = require("../../models/File.js");
 const Folder = require("../../models/Folder.js");
-const { format } = require("morgan");
+const path = require("path");
+const fs = require("fs");
 
 module.exports = {
     admin: {},
@@ -131,6 +132,63 @@ module.exports = {
                     }
                 }
             );
+        },
+        async deleteOne(req, res) {
+            if (!req.body) {
+                return res
+                    .status(406)
+                    .send({ status: false, message: "Body is empty" });
+            }
+            const folderPath = req.body.path || "/";
+            const token = req.headers.authorization.split(".");
+            const signature = token[1];
+            const user = await User.findOne({ signature });
+            const login = user.login;
+
+            const folder = await Folder.findOne({
+                user: login,
+                path: folderPath,
+            });
+            if (!folder) {
+                return res
+                    .status(404)
+                    .send({ status: false, message: "Folder not found" });
+            }
+            const parentPath = new RegExp(`${folder.path}/`, "i");
+            await Folder.deleteMany({
+                user: login,
+                path: parentPath,
+            });
+            await File.deleteMany({
+                user: login,
+                url: parentPath,
+            });
+            await File.deleteMany({
+                user: login,
+                url: folderPath,
+            });
+            const userPath = path.join(
+                __dirname,
+                `../../uploads/${login}${folder.path}`
+            );
+            fs.rmdir(userPath, { maxRetries: 3, recursive: true }, (err) => {
+                if (err) {
+                    console.log("Error in delete account - fs :>> ", err);
+                }
+            });
+            folder.deleteOne((err) => {
+                if (err) {
+                    console.log("Error in Delete one folder :>> ", err);
+                    return res.status(500).send({
+                        status: false,
+                        message: "Error! Contact the administrator",
+                    });
+                }
+                return res.status(200).send({
+                    status: false,
+                    message: "Deleted one folder - success",
+                });
+            });
         },
     },
 };

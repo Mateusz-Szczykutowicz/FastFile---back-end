@@ -13,15 +13,19 @@ const config = require("../config.js");
 const sha256 = require("sha256");
 const path = require("path");
 const Folder = require("../models/Folder.js");
+const fs = require("fs");
 
 //? Create one folder - POST api/v1/folders
-router.post("/", authMiddleware.checkToken, folderController.user.create);
+router.post("/", folderController.user.create);
 
-//? Get all files in folder - GET api/v1/folders?path=img
+//? Get all files and folders in folder - GET api/v1/folders?path=img
 router.get(
     "/",
-    authMiddleware.checkToken,
+    // authMiddleware.checkToken,
     folderController.user.getAllFilesAndFolders
 );
+
+//? Delete one folder with child
+router.delete("/", folderController.user.deleteOne);
 
 module.exports = router;
