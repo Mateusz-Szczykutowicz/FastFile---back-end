@@ -24,7 +24,8 @@
     "express-fileupload": "^1.2.0",
     "mongoose": "^5.10.11",
     "mongoose-url-slugs": "^1.0.2",
-    "sha256": "^0.2.0"
+    "sha256": "^0.2.0",
+    "sharp": "^0.26.3"
   },
   "devDependencies": {
     "morgan": "^1.10.0"

@@ -169,7 +169,7 @@ module.exports = {
             });
             const userPath = path.join(
                 __dirname,
-                `../../uploads/${login}${folder.path}`
+                `../../uploads/${login}/root${folder.path}`
             );
             fs.rmdir(userPath, { maxRetries: 3, recursive: true }, (err) => {
                 if (err) {

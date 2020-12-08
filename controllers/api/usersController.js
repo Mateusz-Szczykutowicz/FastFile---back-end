@@ -18,12 +18,10 @@ module.exports = {
                 token: myToken.createToken(),
             });
         },
-
         logout(req, res) {
             authMiddleware.logout(req.headers.authorization);
             res.status(200).send({ status: true, message: "Logout - success" });
         },
-
         register(req, res) {
             if (req.body) {
                 const { login, password, email } = req.body;
@@ -60,6 +58,23 @@ module.exports = {
                                 `${user["_id"]}.${config.hash}${Math.random()}`
                             );
                             user.save();
+                            userFolderPath = path.join(
+                                __dirname,
+                                `../../uploads/${user.login}`
+                            );
+                            fs.mkdir(userFolderPath, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                            fs.mkdir(
+                                `${userFolderPath}/resizedImage`,
+                                (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                }
+                            );
                             return res.status(201).send({
                                 status: true,
                                 message: "Register - success",
@@ -228,7 +243,6 @@ module.exports = {
                 }
             });
         },
-
         async getOne(req, res) {
             const login = req.params.user.toLowerCase();
             User.findOne({ login }, (err, resp) => {
@@ -256,7 +270,6 @@ module.exports = {
                 }
             });
         },
-
         async deleteOne(req, res) {
             let login = req.params.user;
             let user = await User.findOne({ login });
@@ -312,7 +325,6 @@ module.exports = {
                 });
             });
         },
-
         async change_pasword(req, res) {
             if (!req.body) {
                 return res

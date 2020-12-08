@@ -37,21 +37,7 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/folders", folderRouter);
 
 //* TEST
-app.get("/test", async (req, res) => {
-    let regexp = new RegExp("/img/test2/", "i");
-    Folder.find({ path: regexp }, (err, resp) => {
-        if (err) {
-            console.log("Error in TEST :>> ", err);
-        }
-        if (resp[0]) {
-            console.log(resp);
-            res.send({ data: resp });
-        } else {
-            console.log("pusto");
-            res.send("Pusto");
-        }
-    });
-});
+app.get("/test", async (req, res) => {});
 
 //? Catch undefined path - url
 app.use((req, res) => {

@@ -18,14 +18,16 @@ const fs = require("fs");
 //? Create one folder - POST api/v1/folders
 router.post("/", folderController.user.create);
 
-//? Get all files and folders in folder - GET api/v1/folders?path=img
+//? Get all files and folders in folder - GET api/v1/folders{?path=/folderName/subFolder}
 router.get(
     "/",
     // authMiddleware.checkToken,
     folderController.user.getAllFilesAndFolders
 );
 
-//? Delete one folder with child
+//? Delete one folder with child - DELETE api/v1/folders
 router.delete("/", folderController.user.deleteOne);
+
+//?
 
 module.exports = router;
