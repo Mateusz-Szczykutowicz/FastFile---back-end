@@ -10,6 +10,7 @@ const User = require("./models/User");
 const adminRouter = require("./routes/admin.js");
 const folderRouter = require("./routes/folders.js");
 const Folder = require("./models/Folder");
+const userMiddleware = require("./middlewares/userMiddleware");
 
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", () => {
@@ -37,7 +38,17 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/folders", folderRouter);
 
 //* TEST
-app.get("/test", async (req, res) => {});
+app.post("/recover", async (req, res) => {
+    const login = req.body.login;
+    const user = await User.findOne({ login }, "login email signature");
+    console.log(user);
+    const token = userMiddleware.RecoverToken.setRecoverToken(user);
+    res.send({ token });
+});
+
+app.post("/recover/:token", userMiddleware.checkRecoverToken, (req, res) => {
+    res.send("Hasło zostało zmienione");
+});
 
 //? Catch undefined path - url
 app.use((req, res) => {

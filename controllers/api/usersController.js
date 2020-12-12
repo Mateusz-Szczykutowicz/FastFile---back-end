@@ -6,6 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const File = require("../../models/File.js");
 const Folder = require("../../models/Folder.js");
+const userMiddleware = require("../../middlewares/userMiddleware.js");
 
 module.exports = {
     user: {
@@ -129,11 +130,11 @@ module.exports = {
         async changePasword(req, res) {
             if (!req.body) {
                 return res
-                    .status(409)
+                    .status(406)
                     .send({ status: false, message: "Body is empty!" });
             }
             if (req.body.password === "") {
-                return res.status(409).send({
+                return res.status(406).send({
                     status: false,
                     message: "Password field is empty!",
                 });
@@ -213,6 +214,33 @@ module.exports = {
                         .send({ status: false, message: "User not found!" });
                 }
             });
+        },
+        async recoverPassword(req, res) {
+            if (!req.body) {
+                return res
+                    .status(406)
+                    .send({ status: false, message: "Body is empty!" });
+            }
+            if (req.body.login === "") {
+                return res.status(406).send({
+                    status: false,
+                    message: "Login field is empty!",
+                });
+            }
+            const login = req.body.login;
+            const user = await User.findOne({ login }, "login email signature");
+            if (!user) {
+                return res
+                    .status(404)
+                    .send({ status: false, message: "User not found!" });
+            }
+            const token = `${userMiddleware.RecoverToken.setRecoverToken(
+                user
+            )}.${user.signature}`;
+            //TODO Send mail
+            //*
+            userMiddleware.sendRecoverMail(user, token);
+            res.status(200).send({ status: true, message: "Email sent" });
         },
     },
     admin: {
