@@ -7,6 +7,7 @@ const User = require("../models/User.js");
 const sha256 = require("sha256");
 const authMiddleware = require("../middlewares/authMiddleware");
 const config = require("../config.js");
+const userMiddleware = require("../middlewares/userMiddleware.js");
 
 //? login - POST api/v1/users/login
 router.post("/login", authMiddleware.login, usersController.user.login);
@@ -18,11 +19,13 @@ router.get("/logout", authMiddleware.checkToken, usersController.user.logout);
 router.post("/", usersController.user.register);
 
 //? recover password - POST api/v1/users/password
-router.post("/password", (req, res) => {
-    // TODO
+router.post("/recover", usersController.user.recoverPassword);
 
-    res.send("Recover password");
-});
+router.put(
+    "/recover",
+    userMiddleware.checkRecoverToken,
+    usersController.user.changePasword
+);
 
 //? get information about account - GET api/v1/users
 router.get("/", authMiddleware.checkToken, usersController.user.getInformation);

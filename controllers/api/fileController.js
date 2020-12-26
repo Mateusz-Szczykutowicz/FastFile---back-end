@@ -145,7 +145,7 @@ module.exports = {
                 if (resp) {
                     let filePath = path.join(
                         __dirname,
-                        `../../uploads/${user}${resp.url}/${resp.name}`
+                        `../../uploads/${user}/root${resp.url}/${resp.name}`
                     );
                     fs.unlink(filePath, (err) => {
                         if (err) {
@@ -175,7 +175,7 @@ module.exports = {
             }
             const oldPath = path.join(
                 __dirname,
-                `../../uploads/${user}${file.url}/${file.name}`
+                `../../uploads/${user}/root${file.url}/${file.name}`
             );
             let fileName = file.name.split(".");
             fileNewName = `${newName}.${fileName[fileName.length - 1]}`;
@@ -184,7 +184,7 @@ module.exports = {
                 const { slug, name } = resp;
                 const newPath = path.join(
                     __dirname,
-                    `../../uploads/${user}${resp.url}/${resp.name}`
+                    `../../uploads/${user}/root${resp.url}/${resp.name}`
                 );
                 fs.rename(oldPath, newPath, (err) => {
                     if (err) {
@@ -219,7 +219,7 @@ module.exports = {
                     }
                     const filePath = path.join(
                         __dirname,
-                        `../../uploads/${user}${resp.url}/${resp.name}`
+                        `../../uploads/${user}/root${resp.url}/${resp.name}`
                     );
                     return res.status(200).sendFile(filePath);
                 } else {
@@ -311,14 +311,14 @@ module.exports = {
                         modified: resp[0].updatedAt,
                     };
                     return res.status(200).send({
-                        status: false,
+                        status: true,
                         message: `Found file`,
                         file: data,
                     });
                 } else {
                     return res
                         .status(200)
-                        .send({ status: false, message: "Files not found!" });
+                        .send({ status: false, message: "File not found!" });
                 }
             });
         },
@@ -336,7 +336,7 @@ module.exports = {
             let file = req.files.upload;
             let path = req.body.path || "";
             let url = `${path}`;
-            let uri = `${user}/${path}/${file.name}`;
+            let uri = `${user}/root/${path}/${file.name}`;
             let { name, size, mimetype } = file;
             const folder = await Folder.findOne({ path, user });
             if (!folder) {
@@ -360,7 +360,7 @@ module.exports = {
                     });
                 } else {
                     if (file.size < 6 * 1024 * 1024) {
-                        if (fileMiddleware.save(file, uri, user)) {
+                        if (fileMiddleware.save(file, uri)) {
                             myFile.save();
                             return res.status(201).send({
                                 status: true,
@@ -403,13 +403,13 @@ module.exports = {
             }
             const oldPath = path.join(
                 __dirname,
-                `../../uploads/${user.login}${file.url}/${file.name}`
+                `../../uploads/${user.login}/root${file.url}/${file.name}`
             );
             let type = file.name.split(".");
             file.name = `${newName}.${type[1]}`;
             const newPath = path.join(
                 __dirname,
-                `../../uploads/${user.login}${file.url}/${file.name}`
+                `../../uploads/${user.login}/root${file.url}/${file.name}`
             );
             console.log("oldPath :>> ", oldPath);
             console.log("newPath :>> ", newPath);
@@ -441,7 +441,7 @@ module.exports = {
                 if (resp) {
                     let filePath = path.join(
                         __dirname,
-                        `../../uploads/${login}${resp.url}/${resp.name}`
+                        `../../uploads/${login}/root${resp.url}/${resp.name}`
                     );
                     fs.unlink(filePath, (err) => {
                         if (err) {
@@ -474,7 +474,7 @@ module.exports = {
             }
             const filePath = path.join(
                 __dirname,
-                `../../uploads/${userName}${file.url}/${file.name}`
+                `../../uploads/${userName}/root${file.url}/${file.name}`
             );
             res.status(200).download(filePath, (err) => {
                 if (err) {
@@ -483,12 +483,14 @@ module.exports = {
             });
         },
         async viewImage(req, res) {
+            let width = req.query.width ? req.query.width * 1 : undefined;
+            let height = req.query.height ? req.query.height * 1 : undefined;
             const slug = req.params.id;
             const token = req.headers.authorization.split(".");
             const signature = token[1];
             const user = await User.findOne({ signature });
             const login = user.login;
-            File.findOne({ user: login, slug }, (err, resp) => {
+            File.findOne({ user: login, slug }, async (err, resp) => {
                 if (err) {
                     console.log("Error in view image :>> ", err);
                     return res.status(500).send({
@@ -506,9 +508,16 @@ module.exports = {
                     }
                     const filePath = path.join(
                         __dirname,
-                        `../../uploads/${login}${resp.url}/${resp.name}`
+                        `../../uploads/${login}/root${resp.url}/${resp.name}`
                     );
-                    return res.status(200).sendFile(filePath);
+                    console.log(filePath);
+                    const resizedFile = await fileMiddleware.resizeImage(
+                        filePath,
+                        login,
+                        resp.name,
+                        { width, height }
+                    );
+                    return res.status(200).sendFile(resizedFile);
                 } else {
                     return res
                         .status(404)

@@ -6,6 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const File = require("../../models/File.js");
 const Folder = require("../../models/Folder.js");
+const userMiddleware = require("../../middlewares/userMiddleware.js");
 
 module.exports = {
     user: {
@@ -18,12 +19,10 @@ module.exports = {
                 token: myToken.createToken(),
             });
         },
-
         logout(req, res) {
             authMiddleware.logout(req.headers.authorization);
             res.status(200).send({ status: true, message: "Logout - success" });
         },
-
         register(req, res) {
             if (req.body) {
                 const { login, password, email } = req.body;
@@ -60,6 +59,23 @@ module.exports = {
                                 `${user["_id"]}.${config.hash}${Math.random()}`
                             );
                             user.save();
+                            userFolderPath = path.join(
+                                __dirname,
+                                `../../uploads/${user.login}`
+                            );
+                            fs.mkdir(userFolderPath, (err) => {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                            fs.mkdir(
+                                `${userFolderPath}/resizedImage`,
+                                (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                }
+                            );
                             return res.status(201).send({
                                 status: true,
                                 message: "Register - success",
@@ -114,11 +130,11 @@ module.exports = {
         async changePasword(req, res) {
             if (!req.body) {
                 return res
-                    .status(409)
+                    .status(406)
                     .send({ status: false, message: "Body is empty!" });
             }
             if (req.body.password === "") {
-                return res.status(409).send({
+                return res.status(406).send({
                     status: false,
                     message: "Password field is empty!",
                 });
@@ -199,6 +215,33 @@ module.exports = {
                 }
             });
         },
+        async recoverPassword(req, res) {
+            if (!req.body) {
+                return res
+                    .status(406)
+                    .send({ status: false, message: "Body is empty!" });
+            }
+            if (req.body.login === "") {
+                return res.status(406).send({
+                    status: false,
+                    message: "Login field is empty!",
+                });
+            }
+            const login = req.body.login;
+            const user = await User.findOne({ login }, "login email signature");
+            if (!user) {
+                return res
+                    .status(404)
+                    .send({ status: false, message: "User not found!" });
+            }
+            const token = `${userMiddleware.RecoverToken.setRecoverToken(
+                user
+            )}.${user.signature}`;
+            //TODO Send mail
+            //*
+            userMiddleware.sendRecoverMail(user, token);
+            res.status(200).send({ status: true, message: "Email sent" });
+        },
     },
     admin: {
         async getAll(req, res) {
@@ -228,7 +271,6 @@ module.exports = {
                 }
             });
         },
-
         async getOne(req, res) {
             const login = req.params.user.toLowerCase();
             User.findOne({ login }, (err, resp) => {
@@ -256,7 +298,6 @@ module.exports = {
                 }
             });
         },
-
         async deleteOne(req, res) {
             let login = req.params.user;
             let user = await User.findOne({ login });
@@ -312,7 +353,6 @@ module.exports = {
                 });
             });
         },
-
         async change_pasword(req, res) {
             if (!req.body) {
                 return res
