@@ -1,33 +1,28 @@
 # API
 
-<br>
-
 ## Users
 
 ### Table of contents
 
--   [Users](#users):
-    -   [User:](#user)
-        -   [Login](#login)
-        -   [Register](#register)
-        -   [Logout](#logout)
-        -   [Account information](#account-information)
-        -   [Change password](#change-password)
-        -   [Delete account](#delete-account)
-    -   [Admin](#admin)
-        -   [All users](#all-users)
-        -   [One user](#one-user)
-        -   [User role](#user-role)
-        -   [Change password](#change-password---admin)
-        -   [Delete user](#delete-user)
+-   [User:](#user)
+    -   [Login](#login)
+    -   [Register](#register)
+    -   [Logout](#logout)
+    -   [Account information](#account-information)
+    -   [Change password](#change-password)
+    -   [Delete account](#delete-account)
+-   [Admin](#admin)
+    -   [All users](#all-users)
+    -   [One user](#one-user)
+    -   [User role](#user-role)
+    -   [Change password](#change-password---admin)
+    -   [Delete user](#delete-user)
 
 ---
 
 #### User:
 
 ##### Login:
-
-<br>
 
 ###### **Request**:
 
@@ -55,8 +50,6 @@ body:
 
 ##### Register:
 
-<br>
-
 ###### **Request**:
 
 description: Register new user
@@ -75,8 +68,6 @@ body:
 
 ##### Logout:
 
-<br>
-
 ###### **Request**:
 
 description: Logout user
@@ -93,8 +84,6 @@ header:
 
 ##### Account information:
 
-<br>
-
 ###### **Request**:
 
 description: Get information about account
@@ -110,8 +99,6 @@ header:
 <br>
 
 ##### Change password:
-
-<br>
 
 ###### **Request**:
 
@@ -132,8 +119,6 @@ header:
 <br>
 
 ##### Delete account:
-
-<br>
 
 ###### **Request**:
 
@@ -157,8 +142,6 @@ header:
 
 ##### All users:
 
-<br>
-
 ###### **Request**:
 
 description: Get all users account
@@ -174,8 +157,6 @@ header:
 <br>
 
 ##### One user:
-
-<br>
 
 ###### **Request**:
 
@@ -193,8 +174,6 @@ header:
 
 ##### User role:
 
-<br>
-
 ###### **Request**:
 
 description: Get information about user's role
@@ -210,8 +189,6 @@ header:
 <br>
 
 ##### Change password - admin:
-
-<br>
 
 ###### **Request**:
 
@@ -232,8 +209,6 @@ header:
 <br>
 
 ##### Delete user:
-
-<br>
 
 ###### **Request**:
 
