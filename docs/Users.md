@@ -1,14 +1,8 @@
-![FastFile](https://cdn.discordapp.com/attachments/758257695458983947/777473345905491979/FastFile-web.png)
-
-# Back-end
-
-## About
-
-## API
+# API
 
 <br>
 
----
+## Users
 
 ### Table of contents
 
@@ -28,10 +22,6 @@
         -   [Delete user](#delete-user)
 
 ---
-
-### Users:
-
-<br>
 
 #### User:
 
