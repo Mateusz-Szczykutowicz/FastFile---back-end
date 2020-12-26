@@ -11,6 +11,8 @@
     -   [Account information](#account-information)
     -   [Change password](#change-password)
     -   [Delete account](#delete-account)
+    -   [Recover password](#recover-password)
+    -   [Change recover password](#change-recover-password)
 -   [Admin](#admin)
     -   [All users](#all-users)
     -   [One user](#one-user)
@@ -133,6 +135,38 @@ URL: _**api/v1/users**_
 headers:
 
 -   Authorization: {token}
+
+<br>
+
+##### Recover password:
+
+###### **Request**:
+
+description: Recover password via email
+
+method: POST
+
+URL: _**api/v1/users/recover**_
+
+body:
+
+-   login
+
+<br>
+
+##### Change recover password:
+
+###### **Request**:
+
+description: Change password
+
+method: PUT
+
+URL: _**api/v1/users/recover**_
+
+body:
+
+-   password
 
 <br>
 

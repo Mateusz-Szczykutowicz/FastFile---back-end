@@ -18,6 +18,8 @@
         -   [Account information](/docs/Users.md/#account-information)
         -   [Change password](/docs/Users.md/#change-password)
         -   [Delete account](/docs/Users.md/#delete-account)
+        -   [Recover password](/docs/Users.md/#recover-password)
+        -   [Change recover password](/docs/Users.md/#change-recover-password)
     -   [Admin](/docs/Users.md/#admin)
         -   [All users](/docs/Users.md/#all-users)
         -   [One user](/docs/Users.md/#one-user)
