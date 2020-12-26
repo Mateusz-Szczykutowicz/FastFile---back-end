@@ -43,7 +43,7 @@
         -   [View image](/docs/Files.md/#view-image---admin)
 -   [Folders](/docs/Folders.md)
     -   [User:](/docs/Folders.md/#user)
-        -   [All items in folder](/docs/Folders.md/#all-item)
+        -   [All items in folder](/docs/Folders.md/#all-items)
         -   [Create folder](/docs/Folders.md/#create-folder)
         -   [Remove folder](/docs/Folders.md/#remove-folder)
 
