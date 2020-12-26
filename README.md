@@ -32,7 +32,7 @@
         -   [Download file](/docs/Files.md/#download-file)
         -   [Rename file](/docs/Files.md/#rename-file)
         -   [Remove file](/docs/Files.md/#remove-file)
-        -   [View image](/docs/Users.md/#view-image)
+        -   [View image](/docs/Files.md/#view-image)
     -   [Admin:](/docs/Files.md/#admin)
         -   [All files](/docs/Files.md/#all-files---admin)
         -   [One file](/docs/Files.md/#one-file---admin)

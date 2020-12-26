@@ -11,7 +11,7 @@
     -   [Download file](#download-file)
     -   [Rename file](#rename-file)
     -   [Remove file](#remove-file)
-    -   [View image](/docs/Users.md/#view-image)
+    -   [View image](#view-image)
 -   [Admin:](#admin)
     -   [All files](#all-files---admin)
     -   [One file](#one-file---admin)
@@ -41,14 +41,23 @@ headers:
 
 ###### **Response**:
 
--   status 200:
-    -   {
+-   status 200
+    ```
+    {
         status: true,
-        message: Login - success
+        message: "Login - success"
         files: [
-        {data}
+            {data}
         ]
-        }
+    }
+    ```
+-   status 401
+    ```
+    {
+        status: false,
+        message: "Unauthorized access"
+    }
+    ```
 
 <br>
 

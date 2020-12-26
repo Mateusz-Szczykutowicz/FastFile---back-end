@@ -39,12 +39,14 @@ body:
 
 ###### **Response**:
 
--   status 200:
-    -   {
+-   status 200
+    ```
+    {
         status: true,
         message: Login - success
         token: {token}
-        }
+    }
+    ```
 
 <br>
 
