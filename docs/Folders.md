@@ -50,19 +50,19 @@ headers:
 
 <br>
 
-##### Remove folder: (soon)
-
-**Do not work**
+##### Remove folder:
 
 ###### **Request**:
-
-**Do not work**
 
 description: Remove one folder
 
 method: DELETE
 
 URL: _**api/v1/folders**_
+
+body:
+
+-   path?
 
 headers:
 

@@ -16,17 +16,17 @@ const Folder = require("../models/Folder.js");
 const fs = require("fs");
 
 //? Create one folder - POST api/v1/folders
-router.post("/", folderController.user.create);
+router.post("/", authMiddleware.checkToken, folderController.user.create);
 
 //? Get all files and folders in folder - GET api/v1/folders{?path=/folderName/subFolder}
 router.get(
     "/",
-    // authMiddleware.checkToken,
+    authMiddleware.checkToken,
     folderController.user.getAllFilesAndFolders
 );
 
 //? Delete one folder with child - DELETE api/v1/folders
-router.delete("/", folderController.user.deleteOne);
+router.delete("/", authMiddleware.checkToken, folderController.user.deleteOne);
 
 //?
 

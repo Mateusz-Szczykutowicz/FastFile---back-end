@@ -35,7 +35,7 @@ router.get(
 //? view img - GET api/v1/files/:id/image
 router.get(
     "/:id/image",
-    // authMiddleware.checkToken,
+    authMiddleware.checkToken,
     fileController.user.viewImage
 );
 
