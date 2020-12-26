@@ -76,7 +76,7 @@ method: GET
 
 URL: _**api/v1/users/logout**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -92,7 +92,7 @@ method: GET
 
 URL: _**api/v1/users**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -112,7 +112,7 @@ body:
 
 -   password
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -128,7 +128,7 @@ method: DELETE
 
 URL: _**api/v1/users**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -150,7 +150,7 @@ method: GET
 
 URL: _**api/v1/admin/users**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -166,7 +166,7 @@ method: GET
 
 URL: _**api/v1/admin/users/:user**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -182,7 +182,7 @@ method: GET
 
 URL: _**api/v1/admin/users/:user/admin**_
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -202,7 +202,7 @@ body:
 
 -   password
 
-header:
+headers:
 
 -   Authorization: {token}
 
@@ -218,8 +218,6 @@ method: DELETE
 
 URL: _**api/v1/admin/users/:user**_
 
-header:
+headers:
 
 -   Authorization: {token}
-
----
