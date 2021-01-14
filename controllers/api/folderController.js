@@ -21,6 +21,11 @@ module.exports = {
             const token = req.headers.authorization.split(".");
             const signature = token[1];
             const user = await User.findOne({ signature });
+            if (!user) {
+                return res
+                    .status(404)
+                    .json({ status: false, message: "User not found!" });
+            }
             const login = user.login;
             const folder = await Folder.findOne({
                 user: login,
